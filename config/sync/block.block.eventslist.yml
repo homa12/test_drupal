@@ -1,0 +1,20 @@
+uuid: 7eef07ed-519a-4874-a73e-d45cb8da8a5d
+langcode: fr
+status: true
+dependencies:
+  module:
+    - adimeo_test
+  theme:
+    - test_drupal
+id: eventslist
+theme: test_drupal
+region: content
+weight: -6
+provider: null
+plugin: events_list_block
+settings:
+  id: events_list_block
+  label: 'Events list'
+  label_display: visible
+  provider: adimeo_test
+visibility: {  }

@@ -1,0 +1,5 @@
+services:
+  unpublish_events_cron_queue_worker:
+    class: Drupal\adimeo_test\Plugin\QueueWorker\UnpublishEventsCronQueueWorker
+    tags:
+      - { name: queue_worker }

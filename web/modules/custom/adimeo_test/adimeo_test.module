@@ -1,0 +1,46 @@
+<?php
+
+/**
+ * @file
+ * This is the module to create a cron unpublish events.
+ */
+
+use Drupal\Core\Datetime\DrupalDateTime;
+
+/**
+ * Implements hook_cron().
+ */
+function adimeo_test_cron() {
+  // Get the queue worker manager.
+  $queue_manager = \Drupal::service('plugin.manager.queue_worker');
+
+  // Create a queue for the unpublish events worker.
+  $queue = \Drupal::queue('unpublish_events_cron_queue_worker');
+
+  // Load the events that need to be processed and add them to the queue.
+  $events = adimeo_test_get_events_to_unpublish();
+  foreach ($events as $event) {
+    $queue->createItem($event);
+  }
+}
+
+/**
+ * Helper function to get the events to unpublish.
+ *
+ * @return array
+ *   Array of events to unpublish.
+ */
+function adimeo_test_get_events_to_unpublish() {
+  // Current Date with format Y-m-d\TH:i:s.
+  $currentDate = new DrupalDateTime();
+  $formattedDate = $currentDate->format('Y-m-d\TH:i:s');
+
+  $entity_type_manager = \Drupal::entityTypeManager();
+  // Search events with end date expired.
+  $query = $entity_type_manager->getStorage('node')->getQuery();
+  $query->condition('status', 1);
+  $query->condition('type', 'event');
+  $query->accessCheck(FALSE);
+  $query->condition('field_date_range.end_value', $formattedDate, '<');
+  return $query->execute();
+}

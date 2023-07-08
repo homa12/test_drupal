@@ -1,0 +1,8 @@
+name: 'Adimeo test'
+type: module
+description: 'Adimeo test listing and cron.'
+core_version_requirement: ^8 || ^9 || ^10
+package: 'Custom'
+dependencies:
+  - drupal:block
+version: '1.0'
